@@ -40,3 +40,9 @@ export const defaultSignatureData: SignatureData = {
   template: 'professional',
   color: '#1A365D',
 };
+
+// Validation schema shapes for zod
+export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+export const phoneRegex = /^(\+\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+export const websiteRegex = /^(www\.)?[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/;
+export const usernameRegex = /^[a-zA-Z0-9_.-]+$/;

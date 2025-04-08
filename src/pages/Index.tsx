@@ -3,7 +3,6 @@ import { useAuth } from "@/context/AuthContext";
 import AuthForm from "@/components/AuthForm";
 import Dashboard from "@/components/Dashboard";
 import Header from "@/components/Header";
-import { SignatureProvider } from "@/context/SignatureContext";
 import { Mail, Code, Copy } from "lucide-react";
 
 const Index = () => {
@@ -68,14 +67,12 @@ const Index = () => {
     );
   }
 
-  // If authenticated, show dashboard wrapped in SignatureProvider
+  // If authenticated, show dashboard
   return (
-    <SignatureProvider>
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <Dashboard />
-      </div>
-    </SignatureProvider>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <Dashboard />
+    </div>
   );
 };
 
