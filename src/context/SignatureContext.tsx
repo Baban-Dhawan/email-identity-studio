@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { SignatureData, defaultSignatureData } from '@/types';
@@ -23,7 +22,7 @@ export const SignatureProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  // Load signatures from localStorage when user changes
+  // Load signatures from localStorage when component mounts
   useEffect(() => {
     if (user) {
       const storedSignatures = localStorage.getItem(`signatures_${user.id}`);
@@ -58,10 +57,6 @@ export const SignatureProvider = ({ children }: { children: ReactNode }) => {
         setSignatures([newSignature]);
         localStorage.setItem(`signatures_${user.id}`, JSON.stringify([newSignature]));
       }
-    } else {
-      // Reset when user logs out
-      setSignatures([]);
-      setCurrentSignature({...defaultSignatureData});
     }
     setIsLoading(false);
   }, [user]);
