@@ -1,4 +1,3 @@
-
 import { SignatureData } from "@/types";
 
 export const renderSignatureHtml = (data: SignatureData): string => {
@@ -138,6 +137,38 @@ export const getFontFamily = (template: string): string => {
   }
 };
 
-export const copyToClipboard = (text: string): Promise<void> => {
-  return navigator.clipboard.writeText(text);
+export const copyToClipboard = async (text: string): Promise<void> => {
+  // Create a temporary element to hold the HTML structure
+  const container = document.createElement("div");
+  container.innerHTML = text;
+  
+  try {
+    // Use the ClipboardItem API for rich content copying if supported
+    if (navigator.clipboard && window.ClipboardItem) {
+      const blob = new Blob([container.innerHTML], { type: 'text/html' });
+      const data = [new ClipboardItem({ 'text/html': blob })];
+      await navigator.clipboard.write(data);
+    } else {
+      // Fallback to the standard clipboard API
+      await navigator.clipboard.writeText(text);
+    }
+  } catch (err) {
+    console.error("Failed to copy:", err);
+    // Last resort fallback for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.error("Fallback copy failed:", err);
+      throw err;
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  }
 };

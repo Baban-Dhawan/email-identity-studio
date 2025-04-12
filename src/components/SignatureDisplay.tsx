@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useSignature } from "@/context/SignatureContext";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { renderSignatureHtml, copyToClipboard } from "@/utils/signatureUtils";
 
@@ -17,26 +17,25 @@ const SignatureDisplay = () => {
     try {
       setCopying(type);
       
-      if (type === 'html') {
-        await copyToClipboard(signatureHtml);
-      } else {
-        // For visual copy, we copy the HTML that can be pasted directly in email clients
-        await copyToClipboard(signatureHtml);
-      }
+      // Always copy the rendered HTML signature for both options
+      // This ensures users can paste directly into Gmail signature editor
+      await copyToClipboard(signatureHtml);
       
       toast({
         title: "Copied to clipboard",
         description: type === 'html' 
           ? "HTML code copied! You can now paste it in your email client's signature settings"
-          : "Signature copied! You can now paste it in your email"
+          : "Signature copied! You can now paste it directly in Gmail signature settings"
       });
     } catch (error) {
       toast({
         title: "Copy failed",
-        description: "Could not copy to clipboard",
+        description: "Could not copy to clipboard. Please try again.",
         variant: "destructive",
       });
+      console.error("Copy error:", error);
     } finally {
+      // Reset the copying state after a delay
       setTimeout(() => setCopying(null), 1000);
     }
   };
@@ -53,7 +52,11 @@ const SignatureDisplay = () => {
             disabled={!!copying}
             className="flex items-center gap-1"
           >
-            <Copy className="h-4 w-4 mr-1" />
+            {copying === 'visual' ? (
+              <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
+            ) : (
+              <Copy className="h-4 w-4 mr-1" />
+            )}
             {copying === 'visual' ? 'Copied!' : 'Copy Signature'}
           </Button>
           
@@ -64,7 +67,11 @@ const SignatureDisplay = () => {
             disabled={!!copying}
             className="flex items-center gap-1"
           >
-            <Copy className="h-4 w-4 mr-1" />
+            {copying === 'html' ? (
+              <CheckCircle className="h-4 w-4 mr-1 text-green-500" />
+            ) : (
+              <Copy className="h-4 w-4 mr-1" />
+            )}
             {copying === 'html' ? 'Copied!' : 'Copy HTML'}
           </Button>
         </div>
