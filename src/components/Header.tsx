@@ -7,7 +7,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <Mail className="h-6 w-6" />
-          <h1 className="text-xl font-bold">Email Identity Studio</h1>
+          <h1 className="text-xl font-bold">Email Signature Studio</h1>
         </div>
       </div>
     </header>
